@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th4 10, 2023 lúc 11:53 AM
+-- Thời gian đã tạo: Th4 10, 2023 lúc 06:29 PM
 -- Phiên bản máy phục vụ: 10.4.21-MariaDB
 -- Phiên bản PHP: 7.3.30
 
@@ -94,12 +94,20 @@ INSERT INTO `daubep` (`id`, `hoten`, `email`, `anh`, `sodienthoai`, `vitri`, `ki
 
 CREATE TABLE `monan` (
   `id` int(11) NOT NULL,
-  `ten` int(11) NOT NULL,
+  `ten` varchar(250) NOT NULL,
   `gia` int(11) NOT NULL,
-  `anh` int(11) NOT NULL,
-  `mota` int(11) NOT NULL,
+  `anh` varchar(1000) NOT NULL,
+  `mota` varchar(5000) NOT NULL,
   `danhmucmonan_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `monan`
+--
+
+INSERT INTO `monan` (`id`, `ten`, `gia`, `anh`, `mota`, `danhmucmonan_id`) VALUES
+(1, 'Gỏi bò', 800000, 'download (9).jpg', 'Gỏi bò là món ăn mới được bổ sung vào menu của nhà hàng và đang được rất nhiều thực khách đón nhận.', 3),
+(3, 'Bồ câu tiềm bí đỏ', 1000000, 'bo-cau-tiem-bi-do-1-750x422.jpg', 'Đây là món ăn kết hợp hài hòa giữa 2 loại thực phẩm rất bổ dưỡng là bồ câu và bí đỏ', 5);
 
 -- --------------------------------------------------------
 
@@ -117,6 +125,14 @@ CREATE TABLE `nhanvien` (
   `diachi` varchar(500) NOT NULL,
   `ngaysinh` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Đang đổ dữ liệu cho bảng `nhanvien`
+--
+
+INSERT INTO `nhanvien` (`id`, `hoten`, `anh`, `email`, `sodienthoai`, `gioitinh`, `diachi`, `ngaysinh`) VALUES
+(1, 'Lê Hoàng Dũng', 'download (10).jpg', 'hoangdung@gmail.com', '0394083764', 'Nam', 'Hà Nội', '1998-04-11'),
+(2, 'Lê Văn Nguyên', 'download (11).jpg', 'vannguyen@gmail.com', '0456384656', 'Nam', 'Đà Nẵng', '1999-03-27');
 
 -- --------------------------------------------------------
 
@@ -187,31 +203,31 @@ ALTER TABLE `taikhoan`
 -- AUTO_INCREMENT cho bảng `ban`
 --
 ALTER TABLE `ban`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `danhmucmonan`
 --
 ALTER TABLE `danhmucmonan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT cho bảng `daubep`
 --
 ALTER TABLE `daubep`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `monan`
 --
 ALTER TABLE `monan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `nhanvien`
 --
 ALTER TABLE `nhanvien`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT cho bảng `taikhoan`

@@ -148,7 +148,7 @@
                                                             <label for="category-film"
                                                                 class="col-form-label">Vị trí:</label>
                                                                 <select class="form-select" aria-label="Default select example" name="vitri" required>
-                                                                    <?php if($arUser["sodienthoai"] == "Bếp chính"){ ?>
+                                                                    <?php if($arUser["vitri"] == "Bếp chính"){ ?>
                                                                     <option value="Bếp chính" selected>Bếp chính</option>
                                                                     <option value="Bếp phụ">Bếp phụ</option>
                                                                     <?php }else{?>

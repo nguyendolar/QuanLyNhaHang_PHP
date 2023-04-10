@@ -1,0 +1,43 @@
+Website quản lý nhà hàng : 
+Công nghệ sử dụng : PHP, MySQL, HTML, CSS, Bootstrap
+Đăng nhập
+Quản lý đầu bếp : 
+Hiển thị danh sách
+Thêm mới
+Cập nhật
+Xóa
+Sắp xếp
+Phân trang
+Tìm kiếm
+Quản lý danh mục món ăn :
+Hiển thị danh sách
+Thêm mới
+Cập nhật
+Xóa
+Sắp xếp
+Phân trang
+Tìm kiếm
+Quản lý món ăn :
+Hiển thị danh sách
+Thêm mới
+Cập nhật
+Xóa
+Sắp xếp
+Phân trang
+Tìm kiếm
+Quản lý nhân viên phục vụ :
+Hiển thị danh sách
+Thêm mới
+Cập nhật
+Xóa
+Sắp xếp
+Phân trang
+Tìm kiếm
+Quản lý bàn :
+Hiển thị danh sách
+Thêm mới
+Cập nhật
+Xóa
+Sắp xếp
+Phân trang
+Tìm kiếm
