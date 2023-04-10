@@ -12,7 +12,7 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Danh sách khách hàng</h1>
+                    <h1 class="mt-4">Danh sách nhân viên</h1>
                     <div class="card mb-4">
                         <div class="card-header">
                         <?php if (isset($_GET['msg'])){
@@ -32,65 +32,36 @@
                                 <thead>
                                 <tr style="background-color : #6D6D6D">
                                         <th>STT</th>
-                                        <th>Khách hàng</th>
-                                        <th>Số điện thoại</th>
+                                        <th>Họ tên</th>
+                                        <th>Ảnh</th>
                                         <th>Email</th>
-                                        <th>Dịch vụ</th>
-                                        <th>Tình trạng dịch vụ</th>
-                                        <!-- <th>Tổng tiền</th>
-                                        <th>Tình trạng thanh toán</th> -->
-                                        <th>Ngày thuê</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Giới tính</th>
+                                        <th>Ngày sinh</th>
+                                        <th>Địa chỉ</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <?php 
-                                $idad = $_SESSION['id'];
-                                if($_SESSION['capdo'] == 1){
-                                    $query = "SELECT a.* FROM khachhang as a
-                                    ORDER BY a.ngaythue DESC";
-                                }else{
-                                    $query = "SELECT a.* FROM khachhang as a
-                                    WHERE a.admin_id = $idad
-                                    ORDER BY a.ngaythue DESC";
-                                }
-                                    
+                                    $query = "SELECT *
+                                    FROM nhanvien
+                                    ORDER BY id DESC";
                                     $result = mysqli_query($connect, $query);
                                     $stt = 1;
                                     while ($arUser = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
                                         $idModelDel = "exampleModalDel".$arUser["id"] ;
-                                        $idModelDes = "exampleModalDes".$arUser["id"] ;
                                         $idModelEdit = "exampleModalEdit".$arUser["id"];
-                                        $khid = $arUser["id"];
-                                        $khdv = "SELECT * FROM khachhangdichvu
-                                        WHERE khachhang_id = $khid";
-                                        $rkhdv = mysqli_query($connect, $khdv);
-                                        $mang = []; 
-                                        while ($akhdvid = mysqli_fetch_array($rkhdv, MYSQLI_ASSOC)) {
-                                            $mang[] = $akhdvid['dichvu_id'];
-                                        }
                                     ?>
                                     <tr>
                                         <td><?php echo $stt ?></td>
                                         <td><?php echo $arUser["hoten"] ?></td>
+                                        <td><img style="width: 220px !important;height: 280px !important;" src="./image/<?php echo $arUser['anh'] ?>"></td>
+                                        <td><?php echo $arUser["email"] ?> </td>
                                         <td><?php echo $arUser["sodienthoai"] ?></td>
-                                        <td><?php echo $arUser["email"] ?></td>
-                                        <td style="width : 330px !important">
-                                            <ul>
-                                            <?php
-                                            $qrkhdv = "SELECT a.*,b.tieude FROM khachhangdichvu as a,baidang as b
-                                            WHERE a.dichvu_id = b.id
-                                            AND a.khachhang_id = $khid";
-                                            $resultkhdv = mysqli_query($connect, $qrkhdv);
-                                            while ($arkhdv = mysqli_fetch_array($resultkhdv, MYSQLI_ASSOC)) {
-                                            ?>
-                                            <li><a target="_blank" href="/i-map/user/chitiet.php?id=<?php echo $arkhdv["dichvu_id"] ?>"><?php echo $arkhdv["tieude"] ?></a></li>
-                                            <?php } ?>
-                                            </ul>
-                                        </td>
-                                        <td><?php echo $arUser["tinhtrangdichvu"] ?></td>
-          
-                                        <td><?php echo $arUser["ngaythue"]; ?></td>
+                                        <td><?php echo $arUser["gioitinh"] ?> </td>
+                                        <td><?php echo date("d-m-Y", strtotime($arUser["ngaysinh"])) ?></td>
+                                        <td><?php echo $arUser["diachi"] ?></td>
                                         <td style="width : 130px !important">
                                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                 data-bs-target="#<?php echo $idModelEdit ?>">
@@ -112,7 +83,7 @@
                                                         </div>
 
                                                         <div class="modal-body">
-                                                            Khách hàng : <?php echo $arUser["hoten"] ?>
+                                                            Nhân viên : <?php echo $arUser["hoten"] ?>
                                                             <form action="function.php" method="post">
                                                                 <input type="hidden" class="form-control" id="id" name="id" value="<?php echo $arUser["id"] ?>">
                                                                 <div class="modal-footer" style="margin-top: 20px">
@@ -120,7 +91,7 @@
                                                                             data-bs-dismiss="modal">
                                                                         Đóng
                                                                     </button>
-                                                                    <button style="width:100px" type="submit" class="btn btn-danger" name="deletekh"> Xóa</button>
+                                                                    <button style="width:100px" type="submit" class="btn btn-danger" name="deletenv"> Xóa</button>
 
                                                                 </div>
 
@@ -152,62 +123,60 @@
                                                         <div class="row">
                                                         <div class="col-6">
                                                             <label for="category-film"
-                                                                class="col-form-label">Họ tên khách hàng:</label>
-                                                                <input type="text" class="form-control" id="category-film" value="<?php echo $arUser["hoten"] ?>" name="hoten" required>
+                                                                class="col-form-label">Họ tên:</label>
+                                                                <input type="text" class="form-control" value="<?php echo $arUser["hoten"] ?>" id="category-film" name="hoten" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label for="category-film"
-                                                                class="col-form-label">Số điện thoại:</label>
-                                                                <input type="number" class="form-control" id="category-film" value="<?php echo $arUser["sodienthoai"] ?>" name="sodienthoai" required>
+                                                                class="col-form-label">Ảnh:</label>
+                                                                <input type="hidden" name="size" value="1000000"> 
+                                                                <input type="file" class="form-control" name="image"/>
                                                         </div>
                                                         </div>
                                                         <div class="row">
                                                         <div class="col-6">
                                                             <label for="category-film"
                                                                 class="col-form-label">Email:</label>
-                                                                <input type="email" class="form-control" id="category-film" value="<?php echo $arUser["email"] ?>" name="email" required>
+                                                                <input type="text" class="form-control" value="<?php echo $arUser["email"] ?>" id="category-film" name="email" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label for="category-film"
-                                                                class="col-form-label">Tình trạng dịch vụ:</label>
-                                                                <input type="text" class="form-control" id="category-film" value="<?php echo $arUser["tinhtrangdichvu"] ?>" name="tinhtrangdichvu" required>
+                                                                class="col-form-label">Số điện thoại:</label>
+                                                                <input type="text" class="form-control" id="category-film" value="<?php echo $arUser["sodienthoai"] ?>" name="sdt" required>
+                                                        </div>
+                                                        </div>
+                                                        <div class="row">
+                                                        <div class="col-6">
+                                                            <label for="category-film"
+                                                                class="col-form-label">Giới tính:</label>
+                                                                <select class="form-select" aria-label="Default select example" name="gioitinh" required>
+                                                                    <?php if($arUser["gioitinh"] == "Nam"){ ?>
+                                                                    <option value="Nam" selected>Nam</option>
+                                                                    <option value="Nữ">Nữ</option>
+                                                                    <?php }else{?>
+                                                                        <option value="Nam" >Nam</option>
+                                                                    <option value="Nữ" selected>Nữ</option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label for="category-film"
+                                                                class="col-form-label">Ngày sinh:</label>
+                                                                <input type="date" class="form-control" id="category-film" name="ngaysinh" value="<?php echo $arUser["ngaysinh"] ?>" required>
                                                         </div>
                                                         </div>
                                                         <div class="row">
                                                         <div class="col-12">
                                                             <label for="category-film"
-                                                                class="col-form-label">Dịch vụ:</label>
-                                                                <select class="form-select" aria-label="Default select example" id="theloai" tabindex="8" name="dichvu[]" multiple="multiple" required>
-                                                                    <?php
-                                                                     $dvU = mysqli_query($connect, "SELECT a.*, b.tenloaibaidang 
-                                                                     FROM baidang as a, loaibaidang as b
-                                                                     WHERE a.loaibaidang_id = b.id
-                                                                     AND a.loaibaidang_id IN
-                                                                     (SELECT id FROM loaibaidang
-                                                                     WHERE demuc = 'Dịch Vụ')");
-                                                                     while ($arDvU = mysqli_fetch_array($dvU, MYSQLI_ASSOC)) {
-                                                                        $s = 0;
-                                                                        foreach ($mang as $a){
-                                                                            if($a == $arDvU['id']){ 
-                                                                                $s++;
-                                                                         }
-                                                                        }
-                                                                        if($s > 0){ ?>
-                                                                            <option selected value="<?php echo $arDvU['id']; ?>" ><?php echo $arDvU['tieude']; ?> - ( <?php echo $arDvU['tenloaibaidang']; ?>)</option>
-                                                                        <?php } else {?>
-                                                                            <option value="<?php echo $arDvU['id']; ?>" ><?php echo $arDvU['tieude']; ?> - ( <?php echo $arDvU['tenloaibaidang']; ?>)</option>
-                                                                            <?php   }
-                                                                    ?>
-                                                                    
-                                                                    <?php } ?>
-                                                                </select>
+                                                                class="col-form-label">Địa chỉ:</label>
+                                                                <input type="text" class="form-control" id="category-film" name="diachi" value="<?php echo $arUser["diachi"] ?>" required>
                                                         </div>
                                                         </div>
                                                     </div>
                                                         <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn btn-primary" name="editkh">Lưu</button>
+                                                    <button type="submit" class="btn btn-primary" name="editnv">Lưu</button>
                                                 </div>
                                                     </form>
                                                 </div>
@@ -233,51 +202,56 @@
                                                         <div class="row">
                                                         <div class="col-6">
                                                             <label for="category-film"
-                                                                class="col-form-label">Họ tên khách hàng:</label>
+                                                                class="col-form-label">Họ tên:</label>
                                                                 <input type="text" class="form-control" id="category-film" name="hoten" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label for="category-film"
-                                                                class="col-form-label">Số điện thoại:</label>
-                                                                <input type="number" class="form-control" id="category-film" name="sodienthoai" required>
+                                                                class="col-form-label">Ảnh:</label>
+                                                                <input type="hidden" name="size" value="1000000"> 
+                                                                <input type="file" class="form-control" name="image" required/>
                                                         </div>
                                                         </div>
                                                         <div class="row">
                                                         <div class="col-6">
                                                             <label for="category-film"
                                                                 class="col-form-label">Email:</label>
-                                                                <input type="email" class="form-control" id="category-film" name="email" required>
+                                                                <input type="text" class="form-control" id="category-film" name="email" required>
                                                         </div>
                                                         <div class="col-6">
                                                             <label for="category-film"
-                                                                class="col-form-label">Tình trạng dịch vụ:</label>
-                                                                <input type="text" class="form-control" id="category-film" name="tinhtrangdichvu" required>
+                                                                class="col-form-label">Số điện thoại:</label>
+                                                                <input type="text" class="form-control" id="category-film" name="sdt" required>
+                                                        </div>
+                                                        </div>
+                                                        <div class="row">
+                                                        <div class="col-6">
+                                                            <label for="category-film"
+                                                                class="col-form-label">Giới tính:</label>
+                                                                <select class="form-select" aria-label="Default select example" name="gioitinh" required>
+                                                                    <option value="" selected>Chọn giới tính</option>
+                                                                    <option value="Nam">Nam</option>
+                                                                    <option value="Nữ">Nữ</option>
+                                                                </select>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <label for="category-film"
+                                                                class="col-form-label">Ngày sinh:</label>
+                                                                <input type="date" class="form-control" id="category-film" name="ngaysinh" required>
                                                         </div>
                                                         </div>
                                                         <div class="row">
                                                         <div class="col-12">
                                                             <label for="category-film"
-                                                                class="col-form-label">Chọn dịch vụ:</label>
-                                                                <select multiple="multiple" class="form-select"  aria-label="Default select example" id="theloai" tabindex="8" name="dichvu[]" required>
-                                                                    <?php
-                                                                     $dvU = mysqli_query($connect, "SELECT a.*, b.tenloaibaidang 
-                                                                     FROM baidang as a, loaibaidang as b
-                                                                     WHERE a.loaibaidang_id = b.id
-                                                                     AND a.loaibaidang_id IN
-                                                                     (SELECT id FROM loaibaidang
-                                                                     WHERE demuc = 'Dịch Vụ')");
-                                                                     while ($arDvU = mysqli_fetch_array($dvU, MYSQLI_ASSOC)) {
-                                                                    ?>
-                                                                    <option value="<?php echo $arDvU['id']; ?>" ><?php echo $arDvU['tieude']; ?> - ( <?php echo $arDvU['tenloaibaidang']; ?>)</option>
-                                                                    <?php } ?>
-                                                                </select>
+                                                                class="col-form-label">Địa chỉ:</label>
+                                                                <input type="text" class="form-control" id="category-film" name="diachi" required>
                                                         </div>
                                                         </div>
                                                     </div>
                                                         <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                         data-bs-dismiss="modal">Đóng</button>
-                                                    <button type="submit" class="btn btn-primary" name="addkh">Lưu </button>
+                                                    <button type="submit" class="btn btn-primary" name="addnv">Lưu</button>
                                                 </div>
                                                     </form>
                                                 </div>

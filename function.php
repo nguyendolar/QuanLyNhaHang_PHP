@@ -1,9 +1,11 @@
 <?php
 include('inc/connect.php');
-$adminid = $_SESSION['id'];
-if(isset($_POST['addsp'])){
-    $ten = $_POST['tensp'];
-    $loaisp  = $_POST['loaisp'];
+//Món ăn
+if(isset($_POST['addma'])){
+    $ten = $_POST['ten'];
+    $gia = $_POST['gia'];
+    $mota = $_POST['mota'];
+    $dmma  = $_POST['dmma'];
     //Upload ảnh
     $file_name = $_FILES['image']['name'];
     $file_size = $_FILES['image']['size'];
@@ -15,32 +17,34 @@ if(isset($_POST['addsp'])){
     $image = $_FILES['image']['name'];
     $target = "./image/".basename($image);
     move_uploaded_file($_FILES['image']['tmp_name'], $target);
-    $query = "INSERT INTO sanpham ( tensanpham, anhsanpham, loaisanpham_id, admin_id) 
-    VALUES ( '{$ten}', '{$image}', '{$loaisp}', '{$adminid}') ";
+    $query = "INSERT INTO monan ( ten, anh, gia, mota, danhmucmonan_id) 
+    VALUES ( '{$ten}', '{$image}', '{$gia}', '{$mota}', '{$dmma}') ";
     $result = mysqli_query($connect, $query);
     if ($result) {
-      header("Location: sanpham.php?msg=1");
+      header("Location: monan.php?msg=1");
     } 
     else {
-        header("Location: sanpham.php?msg=2");
+        header("Location: monan.php?msg=2");
     }
 }
-if(isset($_POST['editsp'])){
-    $ten = $_POST['tensp'];
-    $loaisp  = $_POST['loaisp'];
+if(isset($_POST['editma'])){
+    $ten = $_POST['ten'];
+    $gia = $_POST['gia'];
+    $mota = $_POST['mota'];
+    $dmma  = $_POST['dmma'];
     $id  = $_POST['id'];
     //Upload ảnh
     $file_name = $_FILES['image']['name'];
     if(empty($file_name)){
-        $query = "UPDATE `sanpham` 
-        SET `tensanpham`='{$ten}',`loaisanpham_id`='{$loaisp}'
+        $query = "UPDATE `monan` 
+        SET `ten`='{$ten}',`danhmucmonan_id`='{$dmma}',`gia`='{$gia}',`mota`='{$mota}'
         WHERE `id`='{$id}'";
         $result = mysqli_query($connect, $query);
         if ($result) {
-          header("Location: sanpham.php?msg=1");
+          header("Location: monan.php?msg=1");
         } 
         else {
-            header("Location: sanpham.php?msg=2");
+            header("Location: monan.php?msg=2");
         }
     }
     else{
@@ -53,24 +57,24 @@ if(isset($_POST['editsp'])){
         $image = $_FILES['image']['name'];
         $target = "./image/".basename($image);
         move_uploaded_file($_FILES['image']['tmp_name'], $target);
-        $query = "UPDATE `sanpham` 
-        SET `tensanpham`='{$ten}',`anhsanpham`='{$image}',`loaisanpham_id`='{$loaisp}'
+        $query = "UPDATE `monan` 
+        SET `ten`='{$ten}',`danhmucmonan_id`='{$dmma}',`gia`='{$gia}',`mota`='{$mota}', `anh`='{$image}'
         WHERE `id`='{$id}'";
         $result = mysqli_query($connect, $query);
         if ($result) {
-          header("Location: sanpham.php?msg=1");
+          header("Location: monan.php?msg=1");
         } 
         else {
-            header("Location: sanpham.php?msg=2");
+            header("Location: monan.php?msg=2");
         }
     }
     
 }
-if(isset($_POST['deletesp'])){
+if(isset($_POST['deletema'])){
     $id  = $_POST['id'];
-    $query = "DELETE FROM sanpham WHERE `id`='{$id}'";
+    $query = "DELETE FROM monan WHERE `id`='{$id}'";
     $result = mysqli_query($connect, $query);
-    header("Location: sanpham.php?msg=1");
+    header("Location: monan.php?msg=1");
     
 }
 //Đầu bếp
@@ -228,81 +232,14 @@ if(isset($_POST['deleteb'])){
     $result = mysqli_query($connect, $query);
     header("Location: ban.php?msg=1");
 }
-//
-if(isset($_POST['addkh'])){
+//Nhân viên
+if(isset($_POST['addnv'])){
     $hoten = $_POST['hoten'];
-    $sodienthoai  = $_POST['sodienthoai'];
-    $email = $_POST['email'];
-    $listdichvu  = $_POST['dichvu'];
-    $ttdichvu = $_POST['tinhtrangdichvu'];
-    $query = "INSERT INTO khachhang ( `hoten`, `sodienthoai`, `email`, `tinhtrangdichvu`, `admin_id`) 
-    VALUES ( '{$hoten}', '{$sodienthoai}', '{$email}', '{$ttdichvu}', '{$adminid}') ";
-    $result = mysqli_query($connect, $query);
-    if ($result) {
-        $check = "SELECT id FROM khachhang Order by id DESC Limit 1";
-        $excute = mysqli_query($connect, $check);
-        $arDvs = mysqli_fetch_array($excute);
-        $khid = $arDvs['id'];
-        foreach ($listdichvu as $dichvu){
-            $querydv = "INSERT INTO khachhangdichvu ( `dichvu_id`, `khachhang_id`) VALUES ( '{$dichvu}', '{$khid}') ";
-            $resultdv = mysqli_query($connect, $querydv);
-        }
-      header("Location: khachhang.php?msg=1");
-    } 
-    else {
-        header("Location: khachhang.php?msg=2");
-    }
-}
-if(isset($_POST['editkh'])){
-    $hoten = $_POST['hoten'];
-    $sodienthoai  = $_POST['sodienthoai'];
-    $email = $_POST['email'];
-    $listdichvu  = $_POST['dichvu'];
-    $ttdichvu = $_POST['tinhtrangdichvu'];
-    $id  = $_POST['id'];
-    $query = "UPDATE `khachhang` 
-        SET `hoten`='{$hoten}',`sodienthoai`='{$sodienthoai}',`email`='{$email}',`tinhtrangdichvu`='{$ttdichvu}'
-        WHERE `id`='{$id}'";
-    $result = mysqli_query($connect, $query);
-    $querykh = "DELETE FROM khachhangdichvu WHERE `khachhang_id`='{$id}'";
-    $resultkh = mysqli_query($connect, $querykh);
-    foreach ($listdichvu as $dichvu){
-        $querydv = "INSERT INTO khachhangdichvu ( `dichvu_id`, `khachhang_id`) VALUES ( '{$dichvu}', '{$id}') ";
-        $resultdv = mysqli_query($connect, $querydv);
-    }
-    if ($result) {
-        header("Location: khachhang.php?msg=1");
-    } 
-    else {
-        header("Location: khachhang.php?msg=2");
-    }
-}
-if(isset($_POST['deletekh'])){
-    $id  = $_POST['id'];
-    $querykh = "DELETE FROM khachhangdichvu WHERE `khachhang_id`='{$id}'";
-    $resultkh = mysqli_query($connect, $querykh);
-    $query = "DELETE FROM khachhang WHERE `id`='{$id}'";
-    $result = mysqli_query($connect, $query);
-    header("Location: khachhang.php?msg=1");
-}
-if(isset($_POST['deletend'])){
-    $id  = $_POST['id'];
-    $queryxoa = "DELETE FROM binhluandanhgia WHERE `nguoidung_id`='{$id}'";
-    $resultxoa = mysqli_query($connect, $queryxoa);
-    $query = "DELETE FROM nguoidung WHERE `id`='{$id}'";
-    $result = mysqli_query($connect, $query);
-    header("Location: nguoidung.php?msg=1");
-}
-if(isset($_POST['deletebldg'])){
-    $id  = $_POST['id'];
-    $queryxoa = "DELETE FROM binhluandanhgia WHERE `traloi`='{$id}'";
-    $resultxoa = mysqli_query($connect, $queryxoa);
-    $query = "DELETE FROM binhluandanhgia WHERE `id`='{$id}'";
-    $result = mysqli_query($connect, $query);
-    header("Location: binhluandanhgia.php?msg=1");
-}
-if(isset($_POST['editanh'])){
-    $id  = $_POST['id'];
+    $email  = $_POST['email'];
+    $sdt = $_POST['sdt'];
+    $gioitinh = $_POST['gioitinh'];
+    $ngaysinh = $_POST['ngaysinh'];
+    $diachi = $_POST['diachi'];
     //Upload ảnh
     $file_name = $_FILES['image']['name'];
     $file_size = $_FILES['image']['size'];
@@ -314,16 +251,67 @@ if(isset($_POST['editanh'])){
     $image = $_FILES['image']['name'];
     $target = "./image/".basename($image);
     move_uploaded_file($_FILES['image']['tmp_name'], $target);
-    $query = "UPDATE `anh` 
-    SET `tenanh`='{$image}'
-    WHERE `id`= 1";
+    $query = "INSERT INTO nhanvien ( hoten, email, anh, sodienthoai, gioitinh, ngaysinh, diachi) 
+    VALUES ( '{$hoten}', '{$email}', '{$image}', '{$sdt}', '{$gioitinh}', '{$ngaysinh}', '{$diachi}') ";
     $result = mysqli_query($connect, $query);
     if ($result) {
-        header("Location: anh.php?msg=1");
+      header("Location: nhanvien.php?msg=1");
     } 
     else {
-        header("Location: anh.php?msg=2");
+        header("Location: nhanvien.php?msg=2");
     }
+}
+if(isset($_POST['editnv'])){
+    $hoten = $_POST['hoten'];
+    $email  = $_POST['email'];
+    $sdt = $_POST['sdt'];
+    $gioitinh = $_POST['gioitinh'];
+    $ngaysinh = $_POST['ngaysinh'];
+    $diachi = $_POST['diachi'];
+    $id  = $_POST['id'];
+    //Upload ảnh
+    $file_name = $_FILES['image']['name'];
+    if(empty($file_name)){
+        $query = "UPDATE `nhanvien` 
+        SET `hoten`='{$hoten}',`email`='{$email}',`sodienthoai`='{$sdt}',`gioitinh`='{$gioitinh}',`ngaysinh`='{$ngaysinh}', `diachi`='{$diachi}'
+        WHERE `id`='{$id}'";
+        $result = mysqli_query($connect, $query);
+        if ($result) {
+          header("Location: nhanvien.php?msg=1");
+        } 
+        else {
+            header("Location: nhanvien.php?msg=2");
+        }
+    }
+    else{
+        $file_size = $_FILES['image']['size'];
+        $file_tmp = $_FILES['image']['tmp_name'];
+        $file_type = $_FILES['image']['type'];
+        $file_parts =explode('.',$_FILES['image']['name']);
+        $file_ext=strtolower(end($file_parts));
+        $expensions= array("jpeg","jpg","png");
+        $image = $_FILES['image']['name'];
+        $target = "./image/".basename($image);
+        move_uploaded_file($_FILES['image']['tmp_name'], $target);
+        $query = "UPDATE `nhanvien` 
+        SET `hoten`='{$hoten}',`email`='{$email}',`sodienthoai`='{$sdt}',`gioitinh`='{$gioitinh}',`ngaysinh`='{$ngaysinh}', `diachi`='{$diachi}', `anh`='{$image}'
+        WHERE `id`='{$id}'";
+        $result = mysqli_query($connect, $query);
+        if ($result) {
+          header("Location: nhanvien.php?msg=1");
+        } 
+        else {
+            header("Location: nhanvien.php?msg=2");
+        }
+    }
+    
+}
+if(isset($_POST['deletenv'])){
+    $id  = $_POST['id'];
+    $query = "DELETE FROM nhanvien WHERE `id`='{$id}'";
+    $result = mysqli_query($connect, $query);
+    header("Location: nhanvien.php?msg=1");
+   
 }
 ?>
  
